@@ -85,7 +85,7 @@ def calculate_campaign_metrics(tv_budget: float, digital_budget: float, email_bu
         "roi": round(roi, 2)
     }
 
-@app.post("/api/simulate")
+@app.post("/simulate")
 async def simulate_campaign(campaign: CampaignCreate):
     """Run a marketing campaign simulation and save the results."""
     # Calculate campaign metrics
@@ -111,7 +111,7 @@ async def simulate_campaign(campaign: CampaignCreate):
     
     return {"success": True, "data": campaign_data}
 
-@app.get("/api/results", response_model=CampaignsResponse)
+@app.get("/results", response_model=CampaignsResponse)
 def get_campaigns(min_roi: Optional[float] = None):
     """Get all campaign results, optionally filtered by minimum ROI."""
     filtered_campaigns = campaigns_db
@@ -128,7 +128,7 @@ def get_campaigns(min_roi: Optional[float] = None):
         "total": len(sorted_campaigns)
     }
 
-@app.post("/api/simulate/random", response_model=CampaignResponse)
+@app.post("/simulate/random", response_model=CampaignResponse)
 async def simulate_random_campaign():
     """Generate a random campaign for demonstration purposes."""
     campaign = CampaignCreate(
@@ -139,14 +139,14 @@ async def simulate_random_campaign():
     
     return await simulate_campaign(campaign)
 
-@app.delete("/api/reset")
+@app.delete("/reset")
 def reset_database():
     """Reset the database (for testing purposes)."""
     campaigns_db.clear()
     return {"success": True, "message": "Database reset successfully"}
 
 # Health check endpoint
-@app.get("/api/health")
+@app.get("/health")
 def health_check():
     return {"status": "ok", "message": "API is running"}
 
